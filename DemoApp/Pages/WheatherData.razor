@@ -1,0 +1,79 @@
+﻿@page "/weather"
+
+@inject IHttpClientFactory _clientFactory;
+
+<h3>WheatherData</h3>
+
+@if (string.IsNullOrWhiteSpace(error) == false)
+{
+    <div class="h2">@error</div>
+}
+else if (weatherForecast is null)
+{
+    <div class="h4">Loading...</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Date</th><th>Weather State</th><th>Low</th><th>High</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var day in weatherForecast.consolidated_weather)
+            {
+                <tr>
+                    <td>@day.applicable_date</td><td>@day.weather_state_name</td><td>@day.min_temp</td><td>@day.max_temp</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    WeatherForecastModel weatherForecast;
+    string error = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // BASIC COMPLETE USE
+        //var request = new HttpRequestMessage(HttpMethod.Get, "https://www.metaweather.com/api/location/742676/");
+        //var client = _clientFactory.CreateClient();
+
+        //HttpResponseMessage response = await client.SendAsync(request);
+
+        //if (response.IsSuccessStatusCode)
+        //{
+        //    weatherForecast = await response.Content.ReadFromJsonAsync<WeatherForecastModel>();
+        //}
+        //else
+        //{
+        //    error = $"There was an error: { response.ReasonPhrase }";
+        //}
+
+        ///REFACTORYING
+
+        //var client = _clientFactory.CreateClient();
+        //try
+        //{
+        //    weatherForecast = await client.GetFromJsonAsync<WeatherForecastModel>("https://www.metaweather.com/api/location/742676/");
+        //}
+        //catch(Exception ex)
+        //{
+        //    error = $"There was an error: { ex.Message }";
+        //}
+
+        // MORE REFACTORY, CHECK ON PROGRAM.CS
+
+        var client = _clientFactory.CreateClient("meta");
+        try
+        {
+            weatherForecast = await client.GetFromJsonAsync<WeatherForecastModel>("location/742676/");
+        }
+        catch(Exception ex)
+        {
+            error = $"There was an error: { ex.Message }";
+        }
+    }
+}
