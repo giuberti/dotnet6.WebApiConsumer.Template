@@ -15,7 +15,7 @@ Sample of a project using HTTPClient to connnect any external API using best pra
 2. Add NuGet Package for **System.Net.Http.JSON**. This will be useful ahead;
 3. Collect the raw API JSON return and create the model for it (in VS you can Paste Special as JSON -> Class);
 3.1. Clean the class if needed;
-4. Set a new REQUEST using `HttpRequestMessage, according to address, content and verb;
+4. Set a new REQUEST using `HttpRequestMessage`, according to address, content and verb;
 5. Set the CLIENT using Factory (`IHttpClientFactory` to declare and `CreateClient()` to instance);
 6. Call the api using `SendAsync` (remember to use ASYNC / AWAIT) and wait for response;
 7. Check for sucess on response using `IsSucessStatusCode`;
